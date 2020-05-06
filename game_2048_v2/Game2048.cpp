@@ -4,7 +4,6 @@
 
 #include "Game2048.h"
 #include <windows.h>
-#include <random>
 #include <time.h>
 #include <conio.h>
 #include <iostream>
@@ -288,21 +287,26 @@ int Game2048::gameOverScreen() {
     oss<<"YOUR MAX NUMBER IS "<<num<<". ";
     if(num<=16){
         oss<<"HOW CAN YOU GET IT?";
-    }else if(num<=128){
+    }else if(num<=64){
         oss<<"HOW STUPID YOU ARE?";
-    }else if(num<=512){
+    }else if(num<=128){
         oss<<"JUST SO SO.";
-    }else if(num<=1024){
+    }else if(num<=512){
         oss<<"emmm..OK..OK.";
-    }else if(num<=2048){
+    }else if(num<=1024){
         oss<<"NICE.";
+    }else if(num<=2048){
+        oss<<"GREAT!YOU ARE WINNER.";
+    }else if(num<=4096){
+        oss<<"ERRRR...AMAZING.";
     }else{
         oss<<"BE HONEST?";
     }
     std::vector<string> str{"        GAME OVER!",
+                            "",
                             oss.str(),
                             "",
-                            " PRESS KEY 'enter'or'esc' TO BACK TO MENU."
+                            "PRESS KEY 'enter'or'esc' TO BACK TO MENU."
     };
     draw(menuPosition,str);
     initChessboard();

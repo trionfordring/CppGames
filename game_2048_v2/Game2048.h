@@ -32,26 +32,31 @@ const std::vector<string> BACKUP_TITLE{
 };
 
 const std::vector<string> BACKGROUND{
-    " ________________ ",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|                |",
-    "|________________|"
+    " ____________________________ ",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|                            |",
+    "|____________________________|"
 };
 
 const std::vector<string> CELL_BACKGROUND{
-        " __ ",
-        "|  |",
-        " -- "
+        " _____ ",
+        "|     |",
+        "|     |",
+        "|_____|"
 };
 
 const float DEFAULT_RAND_4_RATE=0.25;
@@ -59,10 +64,10 @@ const int DEFAULT_CHESSBOARD_INIT_PIECE_NUM=2;
 const int DEFAULT_CHESSBOARD_WIDTH=4;
 const int DEFAULT_CHESSBOARD_HEIGHT=4;
 const int DEFAULT_CHESSBOARD_BORDER=1;
-const int DEFAULT_CELL_WIDTH=4;
-const int DEFAULT_CELL_HEIGHT=3;
-const int DEFAULT_NUMBER_SHOW_POSITION_X=1;
-const int DEFAULT_NUMBER_SHOW_POSITION_Y=1;
+const int DEFAULT_CELL_WIDTH=7;
+const int DEFAULT_CELL_HEIGHT=4;
+const int DEFAULT_NUMBER_SHOW_POSITION_X=2;
+const int DEFAULT_NUMBER_SHOW_POSITION_Y=2;
 const int DEFAULT_INIT_CURSOR_POSITION_X=0;
 const int DEFAULT_INIT_CURSOR_POSITION_Y=0;
 const int DEFAULT_TITLE_CURSOR_POSITION_X=DEFAULT_INIT_CURSOR_POSITION_X+6;
