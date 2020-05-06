@@ -53,8 +53,8 @@ const std::vector<string> CELL_BACKGROUND{
         "|  |",
         " -- "
 };
-const int RAND_4_RATE_ACCURACY=100000;
-const float DEFAULT_RAND_4_RATE=0.1;
+
+const float DEFAULT_RAND_4_RATE=0.25;
 const int DEFAULT_CHESSBOARD_INIT_PIECE_NUM=2;
 const int DEFAULT_CHESSBOARD_WIDTH=4;
 const int DEFAULT_CHESSBOARD_HEIGHT=4;
@@ -86,6 +86,7 @@ const int DEFAULT_MENU_SELECTED_COLOR    =  BACKGROUND_RED | BACKGROUND_GREEN | 
 
 class Game2048 {
 private:
+public :
     int rand4Rate;
     Point initPoint;
     Point textPosition;
@@ -114,7 +115,6 @@ private:
 
     std::vector<std::string> startMenu;
     std::vector<std::string> continueMenu;
-
     void initChessboard();
     Point randomPoint();
     Point randomEmptyPoint();

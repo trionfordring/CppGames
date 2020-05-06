@@ -14,7 +14,7 @@ using std::cout;
 
 
 Game2048::Game2048()
-:rand4Rate(DEFAULT_RAND_4_RATE*RAND_4_RATE_ACCURACY),
+:rand4Rate((int)(DEFAULT_RAND_4_RATE*RAND_MAX)),
  initPieceNum(DEFAULT_CHESSBOARD_INIT_PIECE_NUM),
  initPoint{DEFAULT_INIT_CURSOR_POSITION_X,DEFAULT_INIT_CURSOR_POSITION_Y},
  cellWidth(DEFAULT_CELL_WIDTH),
@@ -71,6 +71,7 @@ void Game2048::init(int cursorSize,bool cursorVisible) {
 }
 
 void Game2048::initChessboard() {
+    srand(clock());
     chessboard = Chessboard(chessboardWidth,chessboardHeight);
     for(int i=0;i<initPieceNum;i++){
         chessboard.insertPiece(randomEmptyPoint(),randomPiece());
@@ -78,7 +79,8 @@ void Game2048::initChessboard() {
 }
 
 int Game2048::randomPiece() {
-    return (rand()%RAND_4_RATE_ACCURACY)>rand4Rate?2:4;
+    int r = rand();
+    return r>rand4Rate?2:4;
 }
 
 Point Game2048::randomEmptyPoint() {
