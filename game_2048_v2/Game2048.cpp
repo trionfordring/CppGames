@@ -35,7 +35,10 @@ Game2048::Game2048()
  newGameText(DEFAULT_STRING_NEW_GAME),
  continueText(DEFAULT_STRING_CONTINUE),
  background(BACKGROUND),
- cellBackground(CELL_BACKGROUND)
+ cellBackground(CELL_BACKGROUND),
+ helpText(DEFAULT_STRING_HELP),
+ startMenu{startText,helpText,exitText},
+ continueMenu{continueText,helpText,newGameText,exitText}
 {}
 
 static HANDLE STD_OUT;
@@ -146,55 +149,58 @@ void Game2048::start() {
     menuScreen();
 }
 
-void Game2048::menuScreen() {
+int Game2048::menuScreen() {
     cleanConsole();
-    drawTitle(titlePosition);
     int selected = 0;
-    std::vector<string> initMenu{startText,exitText};
-
+    std::vector<string> menu=startMenu;
+    auto gameScreenHandle = [&]()->int {
+        int ans = gameScreen();
+        cleanConsole();
+        selected=0;
+        if(ans==1){
+            gameOverScreen();
+            menu=startMenu;
+            return 1;
+        }
+        return 0;
+    };
     int c;
     while(true){
-        drawMenu(menuPosition,selected,initMenu);
-       c = read();
+        drawTitle(titlePosition);
+        drawMenu(menuPosition, selected, menu);
+        c = read();
        switch (c){
            case 'a':
            case 'w':
                selected--;
                selected = abs(selected);
-               selected%=initMenu.size();
-               drawMenu(menuPosition,selected,initMenu);
+               selected%=menu.size();
+               drawMenu(menuPosition, selected, menu);
                break;
            case 's':
            case 'd':
                selected++;
                selected = abs(selected);
-               selected%=initMenu.size();
-               drawMenu(menuPosition,selected,initMenu);
+               selected%=menu.size();
+               drawMenu(menuPosition, selected, menu);
                break;
            case 13:
-               if(initMenu[selected]==exitText){
-                   return;
-               }else if(initMenu[selected]==startText){
-                   initMenu={continueText,newGameText,exitText};
-                   gameScreen();
-                   cleanConsole();
-                   drawTitle(titlePosition);
-                   selected=0;
-               }else if(initMenu[selected]==continueText){
-                   gameScreen();
-                   cleanConsole();
-                   drawTitle(titlePosition);
-                   selected=0;
-               }else if(initMenu[selected]==newGameText){
-                    initChessboard();
-                    gameScreen();
-                   cleanConsole();
-                   drawTitle(titlePosition);
-                    selected=0;
+               if(menu[selected] == exitText){
+                   return 0;
+               }else if(menu[selected] == startText){
+                   menu=continueMenu;
+                   gameScreenHandle();
+               }else if(menu[selected] == continueText){
+                   gameScreenHandle();
+               }else if(menu[selected] == newGameText){
+                   initChessboard();
+                   gameScreenHandle();
+               }else if(menu[selected] == helpText){
+                   helpScreen();
                }
                break;
            case 27:
-               return;
+               return 0;
        }
     }
 }
@@ -215,37 +221,37 @@ void Game2048::drawChessboard(Point point) {
     }
 }
 
-void Game2048::gameScreen() {
+int Game2048::gameScreen() {
     cleanConsole();
     showText(textPosition,"  use 'esc' to back to enum,use 'w''a''s''d' to slide chessboard.");
     int c;
     bool ans;
     while(true){
         drawChessboard(initPoint);
+        if(chessboard.getPieceCount()==chessboard.getHeight()*chessboard.getWidth()&&!chessboard.canSlide()){
+            return 1;
+        }
         c=read();
         switch (c){
             case 27:
-                return;
+                return 0;
             case 'w':
                 ans = chessboard.slide_UP();
-                randomInsertPiece();
                 break;
             case 'a':
                 ans = chessboard.slide_LEFT();
-                randomInsertPiece();
                 break;
             case 's':
                 ans = chessboard.slide_DOWN();
-                randomInsertPiece();
                 break;
             case 'd':
                 ans = chessboard.slide_RIGHT();
-                randomInsertPiece();
                 break;
         }
         if(ans){
+            randomInsertPiece();
             std::ostringstream oss;
-            oss<<" nice! you max num is "<<chessboard.getMaxPiece();
+            oss<<" nice! your max num is "<<chessboard.getMaxPiece();
             showText(textPosition,oss.str());
         }else{
             showText(textPosition," you can't move like this.");
@@ -269,4 +275,54 @@ bool Game2048::randomInsertPiece() {
         return false;
     }
     return chessboard.insertPiece(randomEmptyPoint(),randomPiece());
+}
+
+
+int Game2048::gameOverScreen() {
+    cleanConsole();
+    drawTitle(titlePosition);
+    int num = chessboard.getMaxPiece();
+    std::ostringstream oss;
+    oss<<"YOUR MAX NUMBER IS "<<num<<". ";
+    if(num<=16){
+        oss<<"HOW CAN YOU GET IT?";
+    }else if(num<=128){
+        oss<<"HOW STUPID YOU ARE?";
+    }else if(num<=512){
+        oss<<"JUST SO SO.";
+    }else if(num<=1024){
+        oss<<"emmm..OK..OK.";
+    }else if(num<=2048){
+        oss<<"NICE.";
+    }else{
+        oss<<"BE HONEST?";
+    }
+    std::vector<string> str{"        GAME OVER!",
+                            oss.str(),
+                            "",
+                            " PRESS KEY 'enter'or'esc' TO BACK TO MENU."
+    };
+    draw(menuPosition,str);
+    initChessboard();
+    int a = read();
+    while(a!=13&&a!=27)a=read();
+    cleanConsole();
+    return 0;
+}
+
+int Game2048::helpScreen() {
+    cleanConsole();
+    drawTitle(titlePosition);
+    std::vector<string> str{"HELP:",
+                            "1. press 'W''A''S''D' to slide all the pieces.",
+                            "2. pieces will move if next cell is empty or same.",
+                            "3. same number will merge and be a bigger num.",
+                            "4. try your best to get a larger number!",
+                            "",
+                            "  PRESS ANY KEY TO BACK"
+    };
+    draw(menuPosition,str);
+    read();
+    cleanConsole();
+    return 0;
 }

@@ -79,20 +79,18 @@ bool Chessboard::merge_UP() {
 }
 
 bool Chessboard::canSlide_UP() {
-    bool ans = false;
     for(int y=1;y<getHeight();y++){
         for(int x=0;x<getWidth();x++){
             int piece = getPiece({x,y});
             if(piece!=0&&piece!=-1){
-                int i=1,next = getPiece({x,y-i});
-                for(;next==0;i++,next = getPiece({x,y-i}));
-                if(next==piece&&board[y-i][x].flag== false){
-                    ans= true;
+                int next = getPiece({x,y-1});
+                if(next==piece||next==0){
+                    return true;
                 }
             }
         }
     }
-    return ans;
+    return false;
 }
 
 bool Chessboard::land_UP() {
@@ -136,20 +134,18 @@ bool Chessboard::merge_DOWN() {
 }
 
 bool Chessboard::canSlide_DOWN() {
-    bool ans = false;
     for(int y=getHeight()-1;y>=0;y--){
         for(int x=0;x<getWidth();x++){
             int piece = getPiece({x,y});
             if(piece!=0&&piece!=-1){
-                int i=1,next = getPiece({x,y+i});
-                for(;next==0;i++,next = getPiece({x,y+i}));
-                if(next==piece&&board[y+i][x].flag== false){
-                    ans= true;
+                int next = getPiece({x,y+1});
+                if(next==piece||next==0){
+                    return true;
                 }
             }
         }
     }
-    return ans;
+    return false;
 }
 
 bool Chessboard::land_DOWN() {
@@ -193,20 +189,18 @@ bool Chessboard::merge_LEFT() {
 }
 
 bool Chessboard::canSlide_LEFT() {
-    bool ans = false;
     for(int x=0;x<getWidth();x++){
         for(int y=0;y<getHeight();y++){
             int piece = getPiece({x,y});
             if(piece!=0&&piece!=-1){
-                int i=1,next = getPiece({x-i,y});
-                for(;next==0;i++,next = getPiece({x-i,y}));
-                if(next==piece&&board[y][x-i].flag== false){
-                    ans= true;
+                int next = getPiece({x-1,y});
+                if(next==piece&&board[y][x-1].flag== false){
+                    return true;
                 }
             }
         }
     }
-    return ans;
+    return false;
 }
 
 bool Chessboard::land_LEFT() {
@@ -250,20 +244,18 @@ bool Chessboard::merge_RIGHT() {
 }
 
 bool Chessboard::canSlide_RIGHT() {
-    bool ans = false;
     for(int x=getWidth()-1;x>=0;x--){
         for(int y=0;y<getHeight();y++){
             int piece = getPiece({x,y});
             if(piece!=0&&piece!=-1){
-                int i=1,next = getPiece({x+i,y});
-                for(;next==0;i++,next = getPiece({x+i,y}));
-                if(next==piece&&board[y][x+i].flag== false){
-                    ans= true;
+                int next = getPiece({x+1,y});
+                if(next==piece&&board[y][x+1].flag== false){
+                    return true;
                 }
             }
         }
     }
-    return ans;
+    return false;
 }
 
 bool Chessboard::land_RIGHT() {
@@ -292,26 +284,22 @@ bool Chessboard::canSlide() {
 
 bool Chessboard::slide_UP() {
     bool ans = merge_UP();
-    land_UP();
-    return ans;
+    return land_UP()||ans;
 }
 
 bool Chessboard::slide_DOWN() {
     bool ans = merge_DOWN();
-    land_DOWN();
-    return ans;
+    return land_DOWN()||ans;
 }
 
 bool Chessboard::slide_LEFT() {
     bool ans = merge_LEFT();
-    land_LEFT();
-    return ans;
+    return land_LEFT()||ans;
 }
 
 bool Chessboard::slide_RIGHT() {
     bool ans = merge_RIGHT();
-    land_RIGHT();
-    return ans;
+    return land_RIGHT()||ans;
 }
 
 int Chessboard::getMaxPiece() {

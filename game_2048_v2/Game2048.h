@@ -79,6 +79,7 @@ const string DEFAULT_STRING_CONTINUE    = "> continue ";
 const string DEFAULT_STRING_SETTING     = "> setting ";
 const string DEFAULT_STRING_NEW_GAME    = "> new game ";
 const string DEFAULT_STRING_EXIT        = "> exit ";
+const string DEFAULT_STRING_HELP        = "> help ";
 
 
 const int DEFAULT_MENU_SELECTED_COLOR    =  BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
@@ -109,7 +110,10 @@ private:
     string settingText;
     string newGameText;
     string continueText;
+    string helpText;
 
+    std::vector<std::string> startMenu;
+    std::vector<std::string> continueMenu;
 
     void initChessboard();
     Point randomPoint();
@@ -119,10 +123,13 @@ private:
     void drawTitle(Point point);
     void drawMenu(Point point,int select,const std::vector<string>& menu);
     void drawChessboard(Point point);
-    void menuScreen();
-    void gameScreen();
-    void gameOverScreen();
-    void helpScreen();
+
+    int menuScreen();
+    int gameScreen();
+    int gameOverScreen();
+    int helpScreen();
+
+
 public:
     Game2048();
     void init(int cursorSize=1,bool cursorVisible= false);
